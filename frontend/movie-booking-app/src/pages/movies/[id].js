@@ -9,7 +9,10 @@ export default function MovieDetail({ movie }) {
   const { id } = router.query;
 
   const fetchSeating = async () => {
-    c;
+    //using axios to fetch data from the api
+    const response = await axios.get(`http://localhost:8000/seating/${id}`);
+    const data = await response.data;
+    return data;
   };
 
   if (router.isFallback) {
