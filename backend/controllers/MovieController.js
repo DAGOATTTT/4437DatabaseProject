@@ -56,10 +56,8 @@ const getmovies = async(req, res) => {
     
     obj2 = await connection.execute('SELECT Showing.MovieID, Movie.title, Start_Time, Datetime  FROM  Showing, Movie WHERE Showing.MovieID = Movie.MovieID ')
     //getting the first index of each query object
-    movieobj = obj[0];
     movieobj2 = obj2[0];
-    console.log(movieobj)
-    console.log(movieobj2)
+
 
     let result = {
         // ...movieobj,
@@ -69,12 +67,23 @@ const getmovies = async(req, res) => {
       res.status(200).json({movies: [result]})
 }
 
+//endpoint: movies/seats
 
+const getseats = async (req,res) => {
+    const connection = await mysql.createConnection({host:'localhost', user: 'root', password: `${process.env.mysqlpasswd}`, database: 'moviesproject'});
+    let seatobj = ""
+    const {ShowingID} = req.body
+    seatobj = await connection.execute(`Select number, status from Seat WHERE '${ShowingID}' = Seat.ShowingID`)
+    let result = seatobj[0]
+    console.log(result)
+    res.status(200).json({seats: result})
+}
 
 
 module.exports = {
     createMovies,
     getmovies,
+    getseats
 
     
 }
