@@ -38,7 +38,7 @@ export default function SignupPage({ username }) {
                 // Successful signup
                 const data = await response.json();
                 console.log('Signup successful:', data);
-                router.push('/'); // Redirect to home page or wherever you want
+                router.push('/login'); // Redirect to login page
             } else {
                 // Handle signup error
                 const errorData = await response.json();
