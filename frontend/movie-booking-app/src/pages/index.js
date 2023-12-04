@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function HomePage({ username }) {
   return (
     <Layout pageTitle="Home">
-      {username ? (
+      {(!username) ? (
         <>
           <h2>Hi {username}</h2>
           <Link href="/movies">Movies</Link>

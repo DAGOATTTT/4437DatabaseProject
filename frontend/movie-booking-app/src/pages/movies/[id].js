@@ -1,42 +1,43 @@
 // pages/movies/[id].js
-import Layout from "../../components/layout";
+import Layout from "../layout";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import axios from "axios";
 
-export default function MovieDetail({ movie }) {
+
+
+const movies = [
+  { MovieID: '1', title: 'Star Wars', showtimes: [{ Start_Time: '6:00 PM' , Datetime: '2023-12-01' }, {Start_Time: '8:00 PM' , Datetime: '2023-12-01'}, { Start_Time: '5:00 PM' , Datetime: '2023-12-01'}] },
+    { MovieID: '2', title: 'Transformers', showtimes: [{ Start_Time: '8:00 PM', Datetime: '2023-12-01' }] },
+    {MovieID: '3', title: 'Jurassic Park', showtimes: [{ Start_Time: '9:00 PM', Datetime: '2023-12-01' }]},
+    {MovieID : '4', title: 'The Lord of the Rings', showtimes: [{ Start_Time: '10:00 PM', Datetime: '2023-12-01' }]}
+];
+
+export default function MovieDetails() {
   const router = useRouter();
-  const { id } = router.query;
+  const { movieId } = router.query;
 
-  const fetchSeating = async () => {
-    //using axios to fetch data from the api
-    const response = await axios.get(`http://localhost:8000/seating/${id}`);
-    const data = await response.data;
-    return data;
-  };
+  // Find the movie by ID
+  const movie = movies.find((m) => m.movieID === movieId);
 
-  if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
-
+  // Render movie details or a not found message
   return (
-    <Layout pageTitle={`Movie Detail - ${movie.title}`}>
-      <h1>{movie.title}</h1>
-      {/* Add more details as needed */}
-      <Link href="/movies">Back to Movies</Link>
+    <Layout>
+      {movie ? (
+        <div>
+          <h1>{movie.title}</h1>
+          <h3>Showtimes</h3>
+          <ul>
+            {movie.showtimes.map((showtime, index) => (
+              <li key={index}>
+                {showtime.Datetime} at {showtime.Start_Time}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <p>Movie not found.</p>
+      )}
     </Layout>
   );
-}
-
-export async function getServerSideProps(context) {
-  const { id } = context.params;
-  // Fetch movie data from an API or database. Replace with your data fetching logic.
-  const res = await fetch(`https://localhost/movie/${id}`);
-  const movie = await res.json();
-
-  return {
-    props: {
-      movie,
-    },
-  };
 }
